@@ -23,7 +23,7 @@ export CACHE_MAX_ENTRY_COUNT=${CACHE_MAX_ENTRY_COUNT:-0.2}
 export MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-4}
 export MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-4}
 export MAX_PREFILL_TOKEN_NUM=${MAX_PREFILL_TOKEN_NUM:-8192}
-export CHAT_TEMPLATE=${CHAT_TEMPLATE:-"chat_template.json"}
+export CHAT_TEMPLATE=${CHAT_TEMPLATE:-"internvl3_chat_template.json"}
 export DTYPE=${DTYPE:-"float16"}
 
 # Function to run the server
