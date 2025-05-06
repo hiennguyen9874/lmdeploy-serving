@@ -16,11 +16,11 @@ export TOKENIZERS_PARALLELISM="true"
 
 export PROXY_URL=${PROXY_URL:-"http://0.0.0.0:8000"}
 export PORT=${PORT:-23333}
-export MODEL_NAME=${MODEL_NAME:-"Qwen/Qwen3-30B-A3B-FP8"}
+export MODEL_NAME=${MODEL_NAME:-"Qwen/Qwen3-32B-AWQ"}
 export TP=${TP:-1}
 export SESSION_LEN=${SESSION_LEN:-4096}
 export CACHE_MAX_ENTRY_COUNT=${CACHE_MAX_ENTRY_COUNT:-0.2}
-export MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-4}
+export MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-10}
 export MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-4}
 export MAX_PREFILL_TOKEN_NUM=${MAX_PREFILL_TOKEN_NUM:-8192}
 export CHAT_TEMPLATE=${CHAT_TEMPLATE:-"qwen3_chat_template.json"}
@@ -30,12 +30,15 @@ run_server() {
     lmdeploy serve api_server ${MODEL_NAME} \
         --proxy-url ${PROXY_URL} \
         --server-port ${PORT} \
-        --backend pytorch \
+        --backend turbomind \
+        --model-format awq \
         --cache-max-entry-count ${CACHE_MAX_ENTRY_COUNT} \
         --eager-mode \
         --max-batch-size ${MAX_BATCH_SIZE} \
         --max-prefill-token-num ${MAX_PREFILL_TOKEN_NUM} \
-        --chat-template ${CHAT_TEMPLATE}
+        --chat-template ${CHAT_TEMPLATE} \
+        --max-concurrent-requests ${MAX_CONCURRENT_REQUESTS}
+        --dtype ${DTYPE}
 }
 
 # Infinite retry loop
