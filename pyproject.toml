@@ -61,3 +61,7 @@ dev = [
     "jupyterlab-widgets>=3.0.14",
     "widgetsnbextension>=4.0.14",
 ]
+
+[build-system]
+requires = ["setuptools-cythonize", "setuptools", "wheel", "pip", "torch>=2.6.0"]
+build-backend = "setuptools.build_meta"

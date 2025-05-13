@@ -9,21 +9,22 @@ set -e
 source .venv/bin/activate
 
 # Specify which GPUs to use (GPUs 3 and 5 in this case)
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-"2,4"}
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-"0"}
 
 # Enable parallel processing for tokenizers to improve performance
 export TOKENIZERS_PARALLELISM="true"
 
 export PROXY_URL=${PROXY_URL:-"http://0.0.0.0:8000"}
 export PORT=${PORT:-23333}
-export MODEL_NAME=${MODEL_NAME:-"Qwen/Qwen3-30B-A3B"}
+export MODEL_NAME=${MODEL_NAME:-"Qwen/Qwen3-30B-A3B-GPTQ-Int4"}
 export TP=${TP:-1}
 export SESSION_LEN=${SESSION_LEN:-4096}
 export CACHE_MAX_ENTRY_COUNT=${CACHE_MAX_ENTRY_COUNT:-0.2}
 export MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-10}
-export MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-4}
+export MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-10}
 export MAX_PREFILL_TOKEN_NUM=${MAX_PREFILL_TOKEN_NUM:-8192}
 export CHAT_TEMPLATE=${CHAT_TEMPLATE:-"qwen3_chat_template.json"}
+export MODEL_FORMAT=${MODEL_FORMAT:-"gptq"}
 
 # Function to run the server
 run_server() {
@@ -31,12 +32,12 @@ run_server() {
         --proxy-url ${PROXY_URL} \
         --server-port ${PORT} \
         --backend turbomind \
+        --model-format ${MODEL_FORMAT} \
         --cache-max-entry-count ${CACHE_MAX_ENTRY_COUNT} \
         --eager-mode \
         --max-batch-size ${MAX_BATCH_SIZE} \
         --max-prefill-token-num ${MAX_PREFILL_TOKEN_NUM} \
         --chat-template ${CHAT_TEMPLATE} \
-        --tp 2 \
         --max-concurrent-requests ${MAX_CONCURRENT_REQUESTS}
 }
 
