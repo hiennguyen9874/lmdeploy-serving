@@ -45,6 +45,7 @@ The server architecture consists of:
 ```
 
 Environment variables:
+
 - `SERVER_NAME`: Host IP (default: 0.0.0.0)
 - `SERVER_PORT`: Port number (default: 8000)
 
@@ -92,12 +93,12 @@ Each model server script supports the following environment variables:
 
 ## Supported Models
 
-| Model | Type | Format | Default Script |
-|-------|------|--------|---------------|
-| OpenGVLab/InternVL3-14B-AWQ | Multimodal | AWQ | start_server-internvl3.sh |
-| Qwen/Qwen3-14B-AWQ | LLM | AWQ | start_server-qwen3_14b.sh |
-| Qwen/Qwen3-30B-A3B-GPTQ-Int4 | LLM | GPTQ | start_server-qwen3_30b_a3b.sh |
-| Qwen/Qwen3-32B-AWQ | LLM | AWQ | start_server-qwen3_32b.sh |
+| Model                        | Type       | Format | Default Script                |
+| ---------------------------- | ---------- | ------ | ----------------------------- |
+| OpenGVLab/InternVL3-14B-AWQ  | Multimodal | AWQ    | start_server-internvl3.sh     |
+| Qwen/Qwen3-14B-AWQ           | LLM        | AWQ    | start_server-qwen3_14b.sh     |
+| Qwen/Qwen3-30B-A3B-GPTQ-Int4 | LLM        | GPTQ   | start_server-qwen3_30b_a3b.sh |
+| Qwen/Qwen3-32B-AWQ           | LLM        | AWQ    | start_server-qwen3_32b.sh     |
 
 ## Advanced Configuration
 
