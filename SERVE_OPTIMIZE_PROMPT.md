@@ -1,4 +1,80 @@
+I am using lmdeploy to run inference with the InternVL3 model. The application only performs inference on a single image and prompt, and the output will be in the format:
+{ "accident_detected": false or true }.
+Each request involves only a single question and response, with no need to store history or cache past interactions.
+Please optimize the configuration and the script below so that lmdeploy maximizes memory efficiency and speed, while maintaining a good balance with accuracy.
+
+Below is the deployment script for lmdeploy.
+
 ```bash
+#!/bin/bash
+
+# Enable debug mode to print each command before execution
+set -x
+# Exit immediately if a command exits with a non-zero status
+set -e
+
+# Activate Python virtual environment
+source .venv/bin/activate
+
+# Specify which GPUs to use (GPUs 3 and 5 in this case)
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-"0"}
+
+# Enable parallel processing for tokenizers to improve performance
+export TOKENIZERS_PARALLELISM="true"
+export BACKEND=${BACKEND:-"turbomind"}
+export PROXY_URL=${PROXY_URL:-"http://0.0.0.0:8000"}
+export PORT=${PORT:-23333}
+export MODEL_NAME=${MODEL_NAME:-"OpenGVLab/InternVL3-8B-AWQ"}
+export TP=${TP:-1}
+export SESSION_LEN=${SESSION_LEN:-16384}
+export CACHE_MAX_ENTRY_COUNT=${CACHE_MAX_ENTRY_COUNT:-0.2}
+export MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-64}
+export MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-32}
+export MAX_PREFILL_TOKEN_NUM=${MAX_PREFILL_TOKEN_NUM:-8192}
+export CHAT_TEMPLATE=${CHAT_TEMPLATE:-"internvl3_chat_template.json"}
+export DTYPE=${DTYPE:-"float16"}
+export CACHE_BLOCK_SEQ_LEN=${CACHE_BLOCK_SEQ_LEN:-8192}
+export QUANT_POLICY=${QUANT_POLICY:-0}
+export VISION_MAX_BATCH_SIZE=${VISION_MAX_BATCH_SIZE:-8}
+export LOG_LEVEL=${LOG_LEVEL:-"INFO"} # INFO, DEBUG, WARNING, ERROR, CRITICAL
+
+# Function to run the server
+run_server() {
+    lmdeploy serve api_server ${MODEL_NAME} \
+        --proxy-url ${PROXY_URL} \
+        --server-port ${PORT} \
+        --cache-max-entry-count ${CACHE_MAX_ENTRY_COUNT} \
+        --eager-mode \
+        --max-batch-size ${MAX_BATCH_SIZE} \
+        --max-prefill-token-num ${MAX_PREFILL_TOKEN_NUM} \
+        --chat-template ${CHAT_TEMPLATE} \
+        --dtype ${DTYPE} \
+        --cache-block-seq-len ${CACHE_BLOCK_SEQ_LEN} \
+        --backend ${BACKEND} \
+        --max-concurrent-requests ${MAX_CONCURRENT_REQUESTS} \
+        --session-len ${SESSION_LEN} \
+        --quant-policy ${QUANT_POLICY} \
+        --vision-max-batch-size ${VISION_MAX_BATCH_SIZE} \
+        --log-level ${LOG_LEVEL} \
+        --tp ${TP}
+}
+
+# Infinite retry loop
+while true; do
+    echo "Starting server..."
+    if run_server; then
+        echo "Server exited successfully"
+        break
+    else
+        echo "Server crashed, restarting in 5 seconds..."
+        sleep 5
+    fi
+done
+```
+
+Below are the vLLM Server Arguments.
+
+```
 Serve LLMs with restful api using fastapi.
 
 positional arguments:
