@@ -42,10 +42,10 @@ export DTYPE=${DTYPE:-"float16"}
 export CACHE_BLOCK_SEQ_LEN=${CACHE_BLOCK_SEQ_LEN:-64}
 
 # Enable KV cache quantization for memory efficiency
-export QUANT_POLICY=${QUANT_POLICY:-4}
+export QUANT_POLICY=${QUANT_POLICY:-8}
 
 # Optimized vision batch size for single-image inference
-export VISION_MAX_BATCH_SIZE=${VISION_MAX_BATCH_SIZE:-1}
+export VISION_MAX_BATCH_SIZE=${VISION_MAX_BATCH_SIZE:-4}
 
 export LOG_LEVEL=${LOG_LEVEL:-"WARNING"} # Reduced logging for performance
 
