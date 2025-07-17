@@ -9,7 +9,7 @@ set -e
 source .venv/bin/activate
 
 # Specify which GPUs to use (GPUs 3 and 5 in this case)
-export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-"0"}
+export CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-"2"}
 
 # Enable parallel processing for tokenizers to improve performance
 export TOKENIZERS_PARALLELISM="true"
@@ -18,16 +18,17 @@ export PROXY_URL=${PROXY_URL:-"http://0.0.0.0:8000"}
 export PORT=${PORT:-23333}
 export MODEL_NAME=${MODEL_NAME:-"OpenGVLab/InternVL3-14B-AWQ"}
 export TP=${TP:-1}
-export SESSION_LEN=${SESSION_LEN:-8192}
+export SESSION_LEN=${SESSION_LEN:-6144}
 export CACHE_MAX_ENTRY_COUNT=${CACHE_MAX_ENTRY_COUNT:-0.2}
 export MAX_CONCURRENT_REQUESTS=${MAX_CONCURRENT_REQUESTS:-64}
 export MAX_BATCH_SIZE=${MAX_BATCH_SIZE:-32}
-export MAX_PREFILL_TOKEN_NUM=${MAX_PREFILL_TOKEN_NUM:-4096}
+export MAX_PREFILL_TOKEN_NUM=${MAX_PREFILL_TOKEN_NUM:-2048}
 export CHAT_TEMPLATE=${CHAT_TEMPLATE:-"internvl3_chat_template.json"}
 export DTYPE=${DTYPE:-"float16"}
-export CACHE_BLOCK_SEQ_LEN=${CACHE_BLOCK_SEQ_LEN:-4096}
+export CACHE_BLOCK_SEQ_LEN=${CACHE_BLOCK_SEQ_LEN:-2048}
 export QUANT_POLICY=${QUANT_POLICY:-0}
 export VISION_MAX_BATCH_SIZE=${VISION_MAX_BATCH_SIZE:-8}
+export LOG_LEVEL=${LOG_LEVEL:-"INFO"} # INFO, DEBUG, WARNING, ERROR, CRITICAL
 
 # Function to run the server
 run_server() {
@@ -46,7 +47,8 @@ run_server() {
         --max-concurrent-requests ${MAX_CONCURRENT_REQUESTS} \
         --session-len ${SESSION_LEN} \
         --quant-policy ${QUANT_POLICY} \
-        --vision-max-batch-size ${VISION_MAX_BATCH_SIZE}
+        --vision-max-batch-size ${VISION_MAX_BATCH_SIZE} \
+        --log-level ${LOG_LEVEL}
 }
 
 # Infinite retry loop
